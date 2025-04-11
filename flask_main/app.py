@@ -5,17 +5,23 @@ import ollama
 app = Flask(__name__)
 
 # Load all reports once
-def load_json(path):
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def load_json(relative_path):
     try:
-        with open(path, 'r') as f:
+        full_path = os.path.join(BASE_DIR, relative_path)
+        with open(full_path, 'r') as f:
             return json.load(f)
     except Exception as e:
         return {"error": str(e)}
 
-health_data = load_json("C:/Users/hp/OneDrive/Desktop/ollama/agents/health_monitor/health_report.json")
-safety_data = load_json("C:/Users/hp/OneDrive/Desktop/ollama/agents/safety_monitoring/safety_report.json")
-routine_data = load_json("C:/Users/hp/OneDrive/Desktop/ollama/agents/daily_routine/daily_report.json")
-social_data = load_json("C:/Users/hp/OneDrive/Desktop/ollama/agents/social_engagement/social_report.json")
+# Load reports using relative paths
+health_data = load_json("agents/health_monitor/health_report.json")
+safety_data = load_json("agents/safety_monitoring/safety_report.json")
+routine_data = load_json("agents/daily_routine/data/daily_report.json")
+social_data = load_json("agents/social_engagement/social_report.json")
 
 @app.route('/')
 def dashboard():
